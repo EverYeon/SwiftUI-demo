@@ -8,36 +8,54 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    var body: some View {
+        VStack(spacing: 12) {
+            Spacer()
+            Text("0")
+                .font(.system(size: 76))
+                .minimumScaleFactor(0.5)
+                .padding(.trailing, 24)
+                .lineLimit(1)
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+            
+            CalculatorButtonPad()
+                .padding(.bottom)
+        }
+    }
+}
+
+struct CalculatorButtonPad: View {
+    let pad: [[CalculatorButtonItem]] = [
+        [.command(.clear), .command(.flip), .command(.percent),
+                                  .op(.divide)],
+        [.digit(7), .digit(8), .digit(9), .op(.multiply)],
+        [.digit(4), .digit(5), .digit(6), .op(.minus)],
+        [.digit(1), .digit(2), .digit(3), .op(.plus)],
+        [.digit(0), .dot, .op(.equal)]
+    ]
+    
+    var body: some View {
+        VStack {
+            ForEach(pad, id: \.self) { row in
+                CalculatorButtonRow(row: row)
+            }
+        }
+    }
+}
+
+struct CalculatorButtonRow: View {
+    let row: [CalculatorButtonItem]
+    
     var body: some View {
         HStack {
-            CalculatorButton(
-                title: "1", size: CGSize(width: 88, height: 88), backgroundColorName: "digitBackground", action: {
-                    print("Button 1")
-                }
-                
-            )
-            CalculatorButton(
-                title: "2", size: CGSize(width: 88, height: 88), backgroundColorName: "digitBackground", action: {
-                    print("Button 2")
-                }
-                
-            )
-            CalculatorButton(
-                title: "3", size: CGSize(width: 88, height: 88), backgroundColorName: "digitBackground", action: {
-                    print("Button 3")
-                }
-                
-            )
-            CalculatorButton(
-                title: "+", size: CGSize(width: 88, height: 88), backgroundColorName: "operatorBackground", action: {
-                    print("Button +")
-                }
-                
-            )
+            ForEach(row, id: \.self) { item in
+                CalculatorButton(
+                    title: item.title, size: item.size, backgroundColorName: item.backgroundColorName) {
+                        print("Button: \(item.title)")
+                    }
+            }
         }
-        
-        
-            
     }
 }
 
@@ -63,3 +81,10 @@ struct CalculatorButton: View {
 #Preview {
     ContentView()
 }
+
+//var previews: some View {
+//    Group {
+//        ContentView()
+//        ContentView().previewDevice("iPhone SE (2nd generation)")
+//    }
+//}
