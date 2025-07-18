@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct PokemonInfoRow: View {
-    let model = PokemonViewModel.sample(id: 1)
+//    let model = PokemonViewModel.sample(id: 1)
+    let model : PokemonViewModel
+    @State var expanded: Bool
     
     var body: some View {
         VStack {
@@ -28,8 +30,10 @@ struct PokemonInfoRow: View {
                         .font(.subheadline)
                         .foregroundColor(.white)
                 }
-            }.padding(.top, 12)
-            HStack(spacing: 20) {
+            }
+            .padding(.top, 12)
+            Spacer()
+            HStack(spacing: expanded ? 20 : -30) {
                 Spacer()
                 Button(action: {
                     print("fav")
@@ -51,8 +55,10 @@ struct PokemonInfoRow: View {
                 }
             }
             .padding(.bottom, 12)
+            .opacity(expanded ? 1: 0)
+            .frame(maxHeight: expanded ? .infinity : 0)
         }
-            .frame(height: 120)
+        .frame(height: expanded ? 120 : 80)
             .padding(.leading, 23)
             .padding(.trailing, 15)
             .background(
@@ -68,6 +74,13 @@ struct PokemonInfoRow: View {
                 }
             )
             .padding(.horizontal)
+//            .animation(.default)
+//            .onTapGesture {
+////                self.expanded.toggle()
+//                withAnimation(.spring(response: 0.55, dampingFraction: 0.425, blendDuration: 0)) {
+//                    self.expanded.toggle()
+//                }
+//            }
     }
 }
 
@@ -82,6 +95,10 @@ struct ToolButtonModifier: ViewModifier {
 
 struct PokemonInfoRow_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoRow()
+        VStack {
+            PokemonInfoRow(model: .sample(id: 1), expanded: false)
+            PokemonInfoRow(model: .sample(id: 21), expanded: true)
+            PokemonInfoRow(model: .sample(id: 25), expanded: false)
+        }
     }
 }
